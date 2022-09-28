@@ -1,0 +1,17 @@
+{
+  "name": "barogo-validation-rules",
+  "version": "0.0.1",
+  "description": "Barogo validation rules",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [
+    "barogo",
+    "validation"
+  ],
+  "author": "Barogo R&D",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/barogo/barogo-validation-rules"
+  }
+}
