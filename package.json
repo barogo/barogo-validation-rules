@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "Barogo validation rules",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "jest"
+  },
   "keywords": [
     "barogo",
     "validation"
@@ -13,5 +15,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/barogo/barogo-validation-rules"
+  },
+  "devDependencies": {
+    "jest": "^29.2.1"
   }
 }
