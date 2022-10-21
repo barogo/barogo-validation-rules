@@ -4,8 +4,9 @@
   "description": "Barogo validation rules",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "mocha"
   },
+  "type": "module",
   "keywords": [
     "barogo",
     "validation"
@@ -17,6 +18,6 @@
     "url": "https://github.com/barogo/barogo-validation-rules"
   },
   "devDependencies": {
-    "jest": "^29.2.1"
+    "mocha": "^10.1.0"
   }
 }

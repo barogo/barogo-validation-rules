@@ -92,31 +92,29 @@ const REGEXP = {
   PHONE: /^\d{10,11}$/,
 };
 
-module.exports = {
-  bRules: Object.assign({
-    required(msg = false) {
-      return ((v) => !essentials.isNull()(v) && !essentials.isEmptyString()(v) || msg);
-    },
-    businessNumber(msg = false) {
-      return ((v) => essentials.isNumber()(v) && essentials.lengthEqual(10)(v) || msg);
-    },
-    email(msg = false) {
-      return ((v) => REGEXP.EMAIL.test(v) || msg);
-    },
-    loginId(msg = false) {
-      return ((v) => REGEXP.LOGIN_ID.test(v) || msg);
-    },
-    passwordCharacter(msg = false) {
-      return ((v) => REGEXP.PASSWORD_ALLOWED_TEXT.test(v) || msg);
-    },
-    password(msg = false) {
-      return ((v) => REGEXP.PASSWORD.test(v).test(v) || msg);
-    },
-    tel(msg = false) {
-      return ((v) => REGEXP.TEL.test(v) || msg);
-    },
-    phone(msg = false) {
-      return ((v) => REGEXP.PHONE.test(v) || msg);
-    },
-  }, essentials)
-};
+export const bRules = Object.assign({
+  required(msg = false) {
+    return ((v) => !essentials.isNull()(v) && !essentials.isEmptyString()(v) || msg);
+  },
+  businessNumber(msg = false) {
+    return ((v) => essentials.isNumber()(v) && essentials.lengthEqual(10)(v) || msg);
+  },
+  email(msg = false) {
+    return ((v) => REGEXP.EMAIL.test(v) || msg);
+  },
+  loginId(msg = false) {
+    return ((v) => REGEXP.LOGIN_ID.test(v) || msg);
+  },
+  passwordCharacter(msg = false) {
+    return ((v) => REGEXP.PASSWORD_ALLOWED_TEXT.test(v) || msg);
+  },
+  password(msg = false) {
+    return ((v) => REGEXP.PASSWORD.test(v).test(v) || msg);
+  },
+  tel(msg = false) {
+    return ((v) => REGEXP.TEL.test(v) || msg);
+  },
+  phone(msg = false) {
+    return ((v) => REGEXP.PHONE.test(v) || msg);
+  },
+}, essentials);
