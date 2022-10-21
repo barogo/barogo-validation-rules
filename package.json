@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "description": "Barogo validation rules",
   "main": "index.js",
+  "types" : "index.d.ts",
   "scripts": {},
   "keywords": [
     "barogo",
