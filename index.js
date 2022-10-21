@@ -80,6 +80,11 @@ const essentials = {
   },
   notNull(msg = false) {
     return ((v) => !essentials.isNull()(v) || msg); 
+  },
+  isEqualString(target, msg = false) {
+    return (v) =>  {
+      return (essentials.notNull()(value) && essentials.notNull()(v) && v === target ) || msg
+    }
   }
 }
 
