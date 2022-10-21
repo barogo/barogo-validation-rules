@@ -109,7 +109,7 @@ export const bRules = Object.assign({
     return ((v) => REGEXP.PASSWORD_ALLOWED_TEXT.test(v) || msg);
   },
   password(msg = false) {
-    return ((v) => REGEXP.PASSWORD.test(v).test(v) || msg);
+    return ((v) => REGEXP.PASSWORD.test(v) || msg);
   },
   tel(msg = false) {
     return ((v) => REGEXP.TEL.test(v) || msg);
