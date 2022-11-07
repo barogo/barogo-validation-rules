@@ -9,6 +9,9 @@ const REGEXP = {
   TEL: /^\d{8,12}$/,
   PHONE: /^\d{10,11}$/,
   CELL_PHONE: /^\d{10,11}$/,
+  // https://www.postgresql.org/docs/9.1/datatype-uuid.html
+  // https://stackoverflow.com/questions/7905929/how-to-test-valid-uuid-guid
+  UUID: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
 };
 // NOTE: validator 내부에서 자체 메서드를 참조하는 경우는 명확한 사유가 있어야 합니다.
 // 상호참조 및 의존성 관리를 위해서 내부 메서드 참조를 제한해야 합니다.
@@ -38,7 +41,7 @@ export const validator = {
   /**
    * 유효한 실수(float) 타입인지 확인합니다.
    * 주의: 실수는 숫자의 부분집합이므로 isFloat 메서드를 참조합니다.
-   * NOTE: epsilon은 1과 1보다 큰 최소 실수값의 차를 의미
+   * NOTE: epsilon은 1과 1보다 큰 최소 실수값의 차를 의미. 그러므로 epsilon은 실수.
    *
    * @param {number} v - 검사할 값
    *
@@ -47,8 +50,7 @@ export const validator = {
   isFloat(v) {
     if (!this.isNumber(v) || 
         v === Number.NEGATIVE_INFINITY ||
-        v === Number.POSITIVE_INFINITY || 
-        v !== Number.EPSILON) {
+        v === Number.POSITIVE_INFINITY) {
       return false;
     }
     return true;
@@ -115,6 +117,36 @@ export const validator = {
   isCellPhone(v) {
     return this.isString(v) && REGEXP.CELL_PHONE.test(v);
   },
+  /**
+   * 유효한 문자열(string):이메일 타입인지 확인합니다.
+   *
+   * @param {string} v - 검사할 값
+   *
+   * @return {boolean} 검사할 값의 문자열(string):이메일 타입 여부
+   */
+  isEmail(v) {
+    return this.isString(v) && REGEXP.EMAIL.test(v);
+  },
+  /**
+   * 유효한 문자열(string):UUID 타입인지 확인합니다.
+   *
+   * @param {string} v - 검사할 값
+   *
+   * @return {boolean} 검사할 값의 문자열(string):UUID 타입 여부
+   */
+  isUUID(v) {
+    return this.isString(v) && REGEXP.UUID.test(v);
+  },
+  /**
+   * 검사할 값이 Boolean 타입인지 확인합니다.
+   *
+   * @param {string} v - 검사할 값
+   *
+   * @return {boolean} 검사할 값의 Boolean 타입 여부
+   */  
+  isBoolean(v) {
+    return typeof v === 'boolean';
+  }
 };
 
 const essentials = {
@@ -210,7 +242,7 @@ export const bRules = Object.assign({ // TODO rules, utils로 일반적인 이�
     return ((v) => essentials.isNumber()(v) && essentials.lengthEqual(10)(v) || msg);
   },
   email(msg = false) {
-    return ((v) => REGEXP.EMAIL.test(v) || msg);
+    return ((v) => validator.isEmail(v) || msg);
   },
   loginId(msg = false) {
     return ((v) => REGEXP.LOGIN_ID.test(v) || msg);

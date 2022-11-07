@@ -119,5 +119,69 @@ describe('validator', () => {
     assert.equal(validator.isCellPhone(null), false);
     assert.equal(validator.isCellPhone(undefined), false);
     assert.equal(validator.isCellPhone(12345678), false);
-  });  
+  });
+
+  it('isEmail', () => {
+    assert.equal(validator.isEmail(''), false);
+    assert.equal(validator.isEmail(null), false);
+    assert.equal(validator.isEmail(undefined), false);
+    assert.equal(validator.isEmail({}), false);
+    assert.equal(validator.isEmail([]), false);
+    assert.equal(validator.isEmail(Symbol()), false);
+    assert.equal(validator.isEmail(NaN), false);
+    assert.equal(validator.isEmail(0), false);
+    assert.equal(validator.isEmail(1.1), false);
+    assert.equal(validator.isEmail(-1), false);
+    assert.equal(validator.isEmail(Number.MIN_VALUE), false);
+    assert.equal(validator.isEmail(Number.MAX_VALUE), false);
+    assert.equal(validator.isEmail('1234567890'), false);
+    assert.equal(validator.isEmail('가나다'), false);
+    assert.equal(validator.isEmail('abc'), false);
+    assert.equal(validator.isEmail('wonder13662@'), false);
+    assert.equal(validator.isEmail('wonder13662@gmail'), false);
+    assert.equal(validator.isEmail('wonder13662@gmail.c'), false);
+    assert.equal(validator.isEmail('wonder13662@gmail.co'), true);
+    assert.equal(validator.isEmail('wonder13662@gmail.com'), true);
+  });
+
+  it('isUUID', () => {
+    assert.equal(validator.isUUID(''), false);
+    assert.equal(validator.isUUID(null), false);
+    assert.equal(validator.isUUID(undefined), false);
+    assert.equal(validator.isUUID({}), false);
+    assert.equal(validator.isUUID([]), false);
+    assert.equal(validator.isUUID(Symbol()), false);
+    assert.equal(validator.isUUID(NaN), false);
+    assert.equal(validator.isUUID(0), false);
+    assert.equal(validator.isUUID(1.1), false);
+    assert.equal(validator.isUUID(-1), false);
+    assert.equal(validator.isUUID(Number.MIN_VALUE), false);
+    assert.equal(validator.isUUID(Number.MAX_VALUE), false);
+    assert.equal(validator.isUUID('1234567890'), false);
+    assert.equal(validator.isUUID('가나다'), false);
+    assert.equal(validator.isUUID('abc'), false);
+    assert.equal(validator.isUUID('wonder13662@gmail.com'), false);
+    assert.equal(validator.isUUID('20f8d123-bdf5'), false);
+    assert.equal(validator.isUUID('20f8d123-bdf5-4b83'), false);
+    assert.equal(validator.isUUID('20f8d123-bdf5-4b83-aa17'), false);
+    assert.equal(validator.isUUID('20f8d123-bdf5-4b83-aa17-b2b04ebe1d0a'), true);
+  });
+
+  it('isBoolean', () => {
+    assert.equal(validator.isBoolean(''), false);
+    assert.equal(validator.isBoolean(null), false);
+    assert.equal(validator.isBoolean(undefined), false);
+    assert.equal(validator.isBoolean({}), false);
+    assert.equal(validator.isBoolean([]), false);
+    assert.equal(validator.isBoolean(Symbol()), false);
+    assert.equal(validator.isBoolean(NaN), false);
+    assert.equal(validator.isBoolean(0), false);
+    assert.equal(validator.isBoolean(1.1), false);
+    assert.equal(validator.isBoolean(-1), false);
+    assert.equal(validator.isBoolean(Number.MIN_VALUE), false);
+    assert.equal(validator.isBoolean(Number.MAX_VALUE), false);
+    assert.equal(validator.isBoolean('가나다'), false);
+    assert.equal(validator.isBoolean(true), true);
+    assert.equal(validator.isBoolean(false), true);
+  });
 });
