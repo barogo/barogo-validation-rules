@@ -1,4 +1,4 @@
-import { validator } from '../index.js';
+import { validator, bRules } from '../index.js';
 // https://mochajs.org/#nodejs-native-esm-support
 import assert from 'assert';
 
@@ -33,7 +33,8 @@ describe('validator', () => {
     assert.equal(validator.isNumber('123'), false);
     assert.equal(validator.isNumber([]), false);
     assert.equal(validator.isNumber({}), false);
-    assert.equal(validator.isNumber(Symbol()), false);    
+    assert.equal(validator.isNumber(Symbol()), false);   
+    assert.equal(validator.isNumber(() => ({})), false); 
   });  
 
   it('isFloat:valid', () => {
@@ -82,14 +83,12 @@ describe('validator', () => {
 
   it('isPositiveInteger:not valid', () => {
     // NOTE: isInteger 검사에서는 성공했으나 isPositiveInteger 에서는 실패
-    assert.equal(validator.isPositiveInteger(1), true);
     assert.equal(validator.isPositiveInteger(0), false);
     assert.equal(validator.isPositiveInteger(-1), false);
+    assert.equal(validator.isPositiveInteger(1), true);
   });  
 
   it('isTelephone', () => {
-    assert.equal(validator.isTelephone('12345678'), true);
-    assert.equal(validator.isTelephone('123456789012'), true);
     assert.equal(validator.isTelephone('1234567890123'), false);
     assert.equal(validator.isTelephone('1234'), false);
     assert.equal(validator.isTelephone('abc'), false);
@@ -102,11 +101,12 @@ describe('validator', () => {
     assert.equal(validator.isTelephone(null), false);
     assert.equal(validator.isTelephone(undefined), false);
     assert.equal(validator.isTelephone(12345678), false);
+    assert.equal(validator.isTelephone(() => ({})), false);
+    assert.equal(validator.isTelephone('12345678'), true);
+    assert.equal(validator.isTelephone('123456789012'), true);
   });
 
   it('isCellPhone', () => {
-    assert.equal(validator.isCellPhone('0987654321'), true);
-    assert.equal(validator.isCellPhone('09876543210'), true); 
     assert.equal(validator.isCellPhone('098765432101'), false);
     assert.equal(validator.isCellPhone('098765432'), false);
     assert.equal(validator.isCellPhone('abc'), false);
@@ -119,6 +119,9 @@ describe('validator', () => {
     assert.equal(validator.isCellPhone(null), false);
     assert.equal(validator.isCellPhone(undefined), false);
     assert.equal(validator.isCellPhone(12345678), false);
+    assert.equal(validator.isCellPhone(() => ({})), false);
+    assert.equal(validator.isCellPhone('0987654321'), true);
+    assert.equal(validator.isCellPhone('09876543210'), true);
   });
 
   it('isEmail', () => {
@@ -134,6 +137,7 @@ describe('validator', () => {
     assert.equal(validator.isEmail(-1), false);
     assert.equal(validator.isEmail(Number.MIN_VALUE), false);
     assert.equal(validator.isEmail(Number.MAX_VALUE), false);
+    assert.equal(validator.isEmail(() => ({})), false);
     assert.equal(validator.isEmail('1234567890'), false);
     assert.equal(validator.isEmail('가나다'), false);
     assert.equal(validator.isEmail('abc'), false);
@@ -157,6 +161,7 @@ describe('validator', () => {
     assert.equal(validator.isUUID(-1), false);
     assert.equal(validator.isUUID(Number.MIN_VALUE), false);
     assert.equal(validator.isUUID(Number.MAX_VALUE), false);
+    assert.equal(validator.isUUID(() => ({})), false);
     assert.equal(validator.isUUID('1234567890'), false);
     assert.equal(validator.isUUID('가나다'), false);
     assert.equal(validator.isUUID('abc'), false);
@@ -181,7 +186,72 @@ describe('validator', () => {
     assert.equal(validator.isBoolean(Number.MIN_VALUE), false);
     assert.equal(validator.isBoolean(Number.MAX_VALUE), false);
     assert.equal(validator.isBoolean('가나다'), false);
+    assert.equal(validator.isBoolean(() => ({})), false);
     assert.equal(validator.isBoolean(true), true);
     assert.equal(validator.isBoolean(false), true);
+  });
+});
+
+describe('bRules', () => {
+  it('required', () => {
+    assert.equal(bRules.required()(null), false);
+    assert.equal(bRules.required()(undefined), false);
+    assert.equal(bRules.required()(''), false);
+    assert.equal(bRules.required()(0), true);
+    assert.equal(bRules.required()({}), true);
+    // FIX ME 빈배열은 유효한 값이 아닌가?
+    // assert.equal(bRules.required()([]), true);
+    assert.equal(bRules.required()(Symbol()), true);
+    assert.equal(bRules.required()(123), true);
+    assert.equal(bRules.required()('123'), true);
+    assert.equal(bRules.required()(() => ({})), true);
+    // FIX ME NaN은 유효한 값이 아닌 것오로 보임. 논의 필요.
+    // assert.equal(bRules.required()(NaN), false);
+  });
+
+  it('businessNumber', () => {
+    assert.equal(bRules.businessNumber()(null), false);
+    assert.equal(bRules.businessNumber()(undefined), false);
+    assert.equal(bRules.businessNumber()(''), false);
+    assert.equal(bRules.businessNumber()(0), false);
+    assert.equal(bRules.businessNumber()({}), false);
+    assert.equal(bRules.businessNumber()(123456789), false);
+    assert.equal(bRules.businessNumber()(1234567890), true);
+  });
+
+  it('tel', () => {
+    assert.equal(bRules.tel()('1234567890123'), false);
+    assert.equal(bRules.tel()('1234'), false);
+    assert.equal(bRules.tel()('abc'), false);
+    assert.equal(bRules.tel()('abc1234567890'), false);
+    assert.equal(bRules.tel()('abc12345'), false);
+    assert.equal(bRules.tel()('가나다'), false);
+    assert.equal(bRules.tel()('가나다1234567890'), false);
+    assert.equal(bRules.tel()('가나다12345'), false);
+    assert.equal(bRules.tel()(''), false);
+    assert.equal(bRules.tel()(null), false);
+    assert.equal(bRules.tel()(undefined), false);
+    assert.equal(bRules.tel()(12345678), false);
+    assert.equal(bRules.tel()(() => ({})), false);
+    assert.equal(bRules.tel()('12345678'), true);
+    assert.equal(bRules.tel()('123456789012'), true);    
+  });
+  
+  it('cellPhone', () => {
+    assert.equal(bRules.cellPhone()('098765432101'), false);
+    assert.equal(bRules.cellPhone()('098765432'), false);
+    assert.equal(bRules.cellPhone()('abc'), false);
+    assert.equal(bRules.cellPhone()('abc0987654'), false);
+    assert.equal(bRules.cellPhone()('abc09876'), false);
+    assert.equal(bRules.cellPhone()('가나다'), false);
+    assert.equal(bRules.cellPhone()('가나다0987654'), false);
+    assert.equal(bRules.cellPhone()('가나다09876'), false);
+    assert.equal(bRules.cellPhone()(''), false);
+    assert.equal(bRules.cellPhone()(null), false);
+    assert.equal(bRules.cellPhone()(undefined), false);
+    assert.equal(bRules.cellPhone()(12345678), false);
+    assert.equal(bRules.cellPhone()(() => ({})), false);
+    assert.equal(bRules.cellPhone()('0987654321'), true);
+    assert.equal(bRules.cellPhone()('09876543210'), true);
   });
 });

@@ -143,12 +143,16 @@ export const validator = {
    * @param {string} v - 검사할 값
    *
    * @return {boolean} 검사할 값의 Boolean 타입 여부
-   */  
+   */
   isBoolean(v) {
     return typeof v === 'boolean';
   }
 };
 
+// TODO 
+// essentials 안에서의 상호참조는 하지 않는 것이 더 좋을 것 같습니다. 
+// 만약 여러 차례의 상호참조가 발생하는 구조가 만들어진다면 
+// 이를 유지보수하기가 쉽지 않을 것입니다.
 const essentials = {
   lengthEqual(length, msg = false) {
     return ((v) => {
@@ -157,6 +161,7 @@ const essentials = {
       return String(v).trim().length == length || msg;
     });
   },
+  // FIX ME 사용하는 곳이 아직 없습니다. 나중에 사용하게 되나요?
   lengthLess(length, msg = false) {
     return ((v) => {
       if (essentials.isNull()(v)) return msg;
@@ -164,6 +169,7 @@ const essentials = {
       return String(v).trim().length < length || msg;
     });
   },
+  // FIX ME 사용하는 곳이 아직 없습니다. 나중에 사용하게 되나요?
   lengthLessEqual(length, msg = false) {
     return ((v) => {
       if (essentials.isNull()(v)) return length == 0 || msg;
@@ -171,6 +177,7 @@ const essentials = {
       return String(v).trim().length <= length || msg;
     });
   },
+  // FIX ME 사용하는 곳이 아직 없습니다. 나중에 사용하게 되나요?
   lengthGreater(length, msg = false) {
     return ((v) => {
       if (essentials.isNull()(v)) return msg;
@@ -178,6 +185,7 @@ const essentials = {
       return String(v).trim().length > length || msg;
     });
   },
+  // FIX ME 사용하는 곳이 아직 없습니다. 나중에 사용하게 되나요?
   lengthGreaterEqual(length, msg = false) {
     return ((v) => {
       if (essentials.isNull()(v)) return length == 0 || msg;
@@ -185,6 +193,7 @@ const essentials = {
       return String(v).trim().length >= length || msg;
     });
   },
+  // FIX ME 사용하는 곳이 아직 없습니다. 나중에 사용하게 되나요?
   lengthBetween(min, max, msg = false) {
     return ((v) => {
       if (essentials.isNull()(v)) return msg;
@@ -195,6 +204,7 @@ const essentials = {
       return (length > min && length < max) || msg;
     });
   },
+  // FIX ME 사용하는 곳이 아직 없습니다. 나중에 사용하게 되나요?
   lengthBetweenInclude(min, max, msg = false) {
     return ((v) => {
       if (essentials.isNull()(v)) return msg;
@@ -205,18 +215,21 @@ const essentials = {
       return (length >= min && length <= max) || msg;
     });
   },
+  // FIX ME 사용하는 곳이 아직 없습니다. 나중에 사용하게 되나요?
   betweenNumber(min, max, msg = false) {
     return ((v) => {
       const number = Number(v);
       return essentials.isNumber()(v) &&  (number > min && number < max) || msg;
     });
   },
+  // FIX ME 사용하는 곳이 아직 없습니다. 나중에 사용하게 되나요?
   betweenIncludeNumber(min, max, msg = false) {
     return ((v) => {
       const number = Number(v);
       return essentials.isNumber()(v) && (number >= min && number <= max) || msg;
     });
   },
+  // FIX ME 사용하는 측에서도 validator.isNumber를 사용하는 것이 어떨까 하는데요.
   isNumber(msg = false) {
     return ((v) => {
       const number = Number(v);
@@ -226,33 +239,69 @@ const essentials = {
   isEmptyString(msg = false) {
     return ((v) => String(v).trim() === '' || msg);
   },
+  // FIX ME null과 undefined는 다른 의미인데요, isNull로만 표현해도 될지 확인부탁드립니다.
   isNull(msg = false) {
     return ((v) => (v === undefined || v === null) || msg);
   },
+  // FIX ME null과 undefined 구분을 확인해야 할 필요가 있습니다.
   notNull(msg = false) {
     return ((v) => !essentials.isNull()(v) || msg); 
   }
 };
 
 export const bRules = Object.assign({ // TODO rules, utils로 일반적인 이름으로 가는 것이 좋겠다.
+  /**
+   * 유효한 값인지 여부를 검사하는 메서드를 반한합니다.
+   * 유효하지 않은 값은 null, undefeind, ''(공백문자열) 입니다.
+   * 주의: 0은 유효한 값으로 인정합니다.
+   *
+   * @param {string|boolean} msg - 유효하지 않을 경우, 반환할 문자열(string) 값 또는 불린(boolean) 값
+   *
+   * @return {function} 유효한 값인지 여부를 검사하는 메서드
+   */
   required(msg = false) {
     return ((v) => !essentials.isNull()(v) && !essentials.isEmptyString()(v) || msg);
   },
+  /**
+   * 유효한 사업자번호 여부를 검사하는 메서드를 반한합니다.
+   *
+   * @param {string|boolean} msg - 유효하지 않을 경우, 반환할 문자열(string) 값 또는 불린(boolean) 값
+   *
+   * @return {function} 유효한 사업자번호 여부를 검사하는 메서드
+   */
   businessNumber(msg = false) {
+    // TODO 좀 더 상세한 사업자번호 규칙이 있지 않을까?
     return ((v) => essentials.isNumber()(v) && essentials.lengthEqual(10)(v) || msg);
   },
+  /**
+   * 유효한 email 여부를 검사하는 메서드를 반한합니다.
+   *
+   * @param {string|boolean} msg - 유효하지 않을 경우, 반환할 문자열(string) 값 또는 불린(boolean) 값
+   *
+   * @return {function} 유효한 email 여부를 검사하는 메서드
+   */
   email(msg = false) {
     return ((v) => validator.isEmail(v) || msg);
   },
+  // FIX ME: 서비스마다 loginId에 대한 규칙은 다를 것 같습니다. 논의 필요할 듯 합니다.
   loginId(msg = false) {
     return ((v) => REGEXP.LOGIN_ID.test(v) || msg);
   },
+  // FIX ME: 서비스마다 password에 대한 규칙은 다를 것 같습니다. 논의 필요할 듯 합니다.
   passwordCharacter(msg = false) {
     return ((v) => REGEXP.PASSWORD_ALLOWED_TEXT.test(v) || msg);
   },
+  // FIX ME: 서비스마다 password에 대한 규칙은 다를 것 같습니다. 논의 필요할 듯 합니다.
   password(msg = false) {
     return ((v) => REGEXP.PASSWORD.test(v) || msg);
   },
+  /**
+   * 유효한 전화번호 여부를 검사하는 메서드를 반한합니다.
+   *
+   * @param {string|boolean} msg - 유효하지 않을 경우, 반환할 문자열(string) 값 또는 불린(boolean) 값
+   *
+   * @return {function} 유효한 전화번호 여부를 검사하는 메서드
+   */
   tel(msg = false) {
     return ((v) => validator.isTelephone(v) || msg);
   },
