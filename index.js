@@ -64,36 +64,16 @@ export const validator = {
     return typeof v === 'number';
   },
   /**
-   * 유효한 부동소수점(float) 타입인지 확인합니다.
-   * 주의: 부동소수점(float)는 숫자의 부분집합이므로 isNumber 메서드를 참조합니다.
-   * NOTE: 
-   * epsilon은 1과 1보다 큰 최소 실수값의 차를 의미. 그러므로 epsilon은 실수.
-   * Number.MAX_VALUE는 21024 - 1 이므로 정수임. 부동 소수점에 포함되지 않습니다.
-   * 참고: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_VALUE
-   *
-   * @param {number} v - 검사할 값
-   *
-   * @return {boolean} 검사할 값의 정수(Integer) 여부
-   */
-  isFloat(v) {
-    if (!this.isNumber(v) || 
-        v === Number.NEGATIVE_INFINITY ||
-        v === Number.POSITIVE_INFINITY ||
-        v === Number.MAX_VALUE ||
-        parseInt(v, 10) === v) {
-      return false;
-    }
-    return true;
-  },
-  /**
    * Float 여부를 판단합니다. 아래 방식을 참고했습니다.
    * https://stackoverflow.com/questions/3885817/how-do-i-check-that-a-number-is-float-or-integer/3886106#3886106
    * 
    * @param {*} v 
    * @returns 
    */
-  isFloatV2(v) {
-    if (!this.isNumber(v) || v === Number.NEGATIVE_INFINITY || v === Number.POSITIVE_INFINITY) {
+  isFloat(v) {
+    if (!this.isNumber(v) || 
+        v === Number.NEGATIVE_INFINITY || 
+        v === Number.POSITIVE_INFINITY) {
       return false;
     }
     return v % 1 !== 0;
@@ -113,17 +93,8 @@ export const validator = {
         v === Number.POSITIVE_INFINITY) {
       return false;
     }
-    return parseInt(v, 10) === v;
-    // return v % 1 === 0;
+    return v % 1 === 0;
   },
-  /**
-   * Integer 여부를 판단합니다. 아래 방식을 참고했습니다.
-   * https://stackoverflow.com/questions/3885817/how-do-i-check-that-a-number-is-float-or-integer/3886106#3886106
-   * 
-   * @param {*} v 
-   * @returns 
-   */  
-  isIntegerV2: (v) => v % 1 === 0,
   /**
    * 유효한 양의 정수(positive integer) 타입인지 확인합니다.
    * 주의: 양의 정수는 정수의 부분집합이므로 isInteger 메서드를 참조합니다.
@@ -216,7 +187,7 @@ const essentials = {
       return String(v).trim().length == length || msg;
     });
   },
-  // FIX ME 사용하는 곳이 아직 없습니다. 나중에 사용하게 되나요?
+  // TODO 사용하는 곳이 없다면 나중에 삭제하기
   lengthLess(length, msg = false) {
     return ((v) => {
       if (essentials.isNull()(v)) return msg;
@@ -224,7 +195,7 @@ const essentials = {
       return String(v).trim().length < length || msg;
     });
   },
-  // FIX ME 사용하는 곳이 아직 없습니다. 나중에 사용하게 되나요?
+  // TODO 사용하는 곳이 없다면 나중에 삭제하기
   lengthLessEqual(length, msg = false) {
     return ((v) => {
       if (essentials.isNull()(v)) return length == 0 || msg;
@@ -232,7 +203,7 @@ const essentials = {
       return String(v).trim().length <= length || msg;
     });
   },
-  // FIX ME 사용하는 곳이 아직 없습니다. 나중에 사용하게 되나요?
+  // TODO 사용하는 곳이 없다면 나중에 삭제하기
   lengthGreater(length, msg = false) {
     return ((v) => {
       if (essentials.isNull()(v)) return msg;
@@ -240,7 +211,7 @@ const essentials = {
       return String(v).trim().length > length || msg;
     });
   },
-  // FIX ME 사용하는 곳이 아직 없습니다. 나중에 사용하게 되나요?
+  // TODO 사용하는 곳이 없다면 나중에 삭제하기
   lengthGreaterEqual(length, msg = false) {
     return ((v) => {
       if (essentials.isNull()(v)) return length == 0 || msg;
@@ -248,7 +219,7 @@ const essentials = {
       return String(v).trim().length >= length || msg;
     });
   },
-  // FIX ME 사용하는 곳이 아직 없습니다. 나중에 사용하게 되나요?
+  // TODO 사용하는 곳이 없다면 나중에 삭제하기
   lengthBetween(min, max, msg = false) {
     return ((v) => {
       if (essentials.isNull()(v)) return msg;
@@ -259,7 +230,7 @@ const essentials = {
       return (length > min && length < max) || msg;
     });
   },
-  // FIX ME 사용하는 곳이 아직 없습니다. 나중에 사용하게 되나요?
+  // TODO 사용하는 곳이 없다면 나중에 삭제하기
   lengthBetweenInclude(min, max, msg = false) {
     return ((v) => {
       if (essentials.isNull()(v)) return msg;
@@ -270,35 +241,32 @@ const essentials = {
       return (length >= min && length <= max) || msg;
     });
   },
-  // FIX ME 사용하는 곳이 아직 없습니다. 나중에 사용하게 되나요?
+  // TODO 사용하는 곳이 없다면 나중에 삭제하기
   betweenNumber(min, max, msg = false) {
     return ((v) => {
       const number = Number(v);
       return essentials.isNumber()(v) &&  (number > min && number < max) || msg;
     });
   },
-  // FIX ME 사용하는 곳이 아직 없습니다. 나중에 사용하게 되나요?
+  // TODO 사용하는 곳이 없다면 나중에 삭제하기
   betweenIncludeNumber(min, max, msg = false) {
     return ((v) => {
       const number = Number(v);
       return essentials.isNumber()(v) && (number >= min && number <= max) || msg;
     });
   },
-  // FIX ME 사용하는 측에서도 validator.isNumber를 사용하는 것이 어떨까 하는데요.
   isNumber(msg = false) {
     return ((v) => {
-      const number = Number(v);
       return validator.isNumber(v) || msg;
     });
   },
   isEmptyString(msg = false) {
     return ((v) => String(v).trim() === '' || msg);
   },
-  // FIX ME null과 undefined는 다른 의미인데요, isNull로만 표현해도 될지 확인부탁드립니다.
+  // NOTE: isNull을 null과 undefined를 동시에 판단하는 것으로 컨벤션을 정함.
   isNull(msg = false) {
     return ((v) => (v === undefined || v === null) || msg);
   },
-  // FIX ME null과 undefined 구분을 확인해야 할 필요가 있습니다.
   notNull(msg = false) {
     return ((v) => !essentials.isNull()(v) || msg); 
   }
@@ -343,6 +311,7 @@ export const bRules = Object.assign({ // TODO rules, utils로 일반적인 이�
     return ((v) => REGEXP.LOGIN_ID.test(v) || msg);
   },
   // FIX ME: 서비스마다 password에 대한 규칙은 다를 것 같습니다. 논의 필요할 듯 합니다.
+  // TODO password의 필요조건을 모듈화해서 조합해서 사용하기
   passwordCharacter(msg = false) {
     return ((v) => REGEXP.PASSWORD_ALLOWED_TEXT.test(v) || msg);
   },
@@ -359,10 +328,6 @@ export const bRules = Object.assign({ // TODO rules, utils로 일반적인 이�
    */
   tel(msg = false) {
     return ((v) => validator.isTelephone(v) || msg);
-  },
-  // FIX ME - tel과 phone이 의미가 비슷하게 보이는 부분이 있습니다. cellPhone으로 명확하게 하면 어떨지용?
-  phone(msg = false) {
-    return ((v) => validator.isCellPhone(v) || msg);
   },
   cellPhone(msg = false) {
     return ((v) => validator.isCellPhone(v) || msg);
