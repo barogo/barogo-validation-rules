@@ -10,9 +10,9 @@ describe('validator', () => {
     // https://mochajs.org/#assertions
     // https://nodejs.org/api/assert.html
     assert.equal(validator.isNumber(1), true);
-    assert.equal(validator.isNumber(0.1), true);
     assert.equal(validator.isNumber(-1), true);
     assert.equal(validator.isNumber(0), true);
+    assert.equal(validator.isNumber(0.1), true);
     assert.equal(validator.isNumber(-1.1), true);
     assert.equal(validator.isNumber(Infinity), true);
     assert.equal(validator.isNumber(-Infinity), true);
@@ -38,18 +38,27 @@ describe('validator', () => {
   });  
 
   it('isFloat:valid', () => {
-    assert.equal(validator.isFloat(1), true);
-    assert.equal(validator.isFloat(-1), true);
-    assert.equal(validator.isFloat(0), true);
-    assert.equal(validator.isFloat(Number.MAX_SAFE_INTEGER), true);
-    assert.equal(validator.isFloat(Number.MIN_SAFE_INTEGER), true);
     assert.equal(validator.isFloat(0.1), true);
     assert.equal(validator.isFloat(-1.1), true);
     // NOTE: MIN_VALUE, MAX_VALUE는 실수임 (MDN 링크 추가 필요!)
     assert.equal(validator.isFloat(Number.MIN_VALUE), true);
-    assert.equal(validator.isFloat(Number.MAX_VALUE), true);
     // NOTE: elipson은 실수(float)임 (MDN 링크 추가 필요!)
     assert.equal(validator.isFloat(Number.EPSILON), true);
+  });
+  
+  it('isFloatV2:valid', () => {
+    // isNumber 성공 검사조건을 가져옴
+    assert.equal(validator.isFloatV2(0.1), true);
+    assert.equal(validator.isFloatV2(-1.1), true);
+    assert.equal(validator.isFloatV2(Number.MIN_VALUE), true);
+    assert.equal(validator.isFloatV2(Number.EPSILON), true);
+    // isFloat 성공 검사조건
+    assert.equal(validator.isFloatV2(0.1), true);
+    assert.equal(validator.isFloatV2(-1.1), true);
+    // NOTE: MIN_VALUE는 실수임 (MDN 링크 추가 필요!)
+    assert.equal(validator.isFloatV2(Number.MIN_VALUE), true);
+    // NOTE: elipson은 실수(float)임 (MDN 링크 추가 필요!)
+    assert.equal(validator.isFloatV2(Number.EPSILON), true);
   });
   
   it('isFloat:not valid', () => {
@@ -59,22 +68,56 @@ describe('validator', () => {
     assert.equal(validator.isFloat(-Infinity), false);
     assert.equal(validator.isFloat(Number.NEGATIVE_INFINITY), false);
     assert.equal(validator.isFloat(Number.POSITIVE_INFINITY), false);
-  });   
+    assert.equal(validator.isFloatV2(Number.MAX_SAFE_INTEGER), false);
+    assert.equal(validator.isFloatV2(Number.MIN_SAFE_INTEGER), false);
+    // NOTE: MAX_VALUE는 정수임 (MDN 링크 추가 필요!)
+    assert.equal(validator.isFloat(Number.MAX_VALUE), false);
+    assert.equal(validator.isFloatV2(1), false);
+    assert.equal(validator.isFloatV2(-1), false);
+    assert.equal(validator.isFloatV2(0), false);
+  });
+  
+  it('isFloatV2:not valid', () => {
+    // isNumber 실패 검사조건
+    assert.equal(validator.isFloatV2(NaN), false);
+    assert.equal(validator.isFloatV2(null), false);
+    assert.equal(validator.isFloatV2(undefined), false);
+    assert.equal(validator.isFloatV2(''), false);
+    assert.equal(validator.isFloatV2('123'), false);
+    assert.equal(validator.isFloatV2([]), false);
+    assert.equal(validator.isFloatV2({}), false);
+    assert.equal(validator.isFloatV2(Symbol()), false);   
+    assert.equal(validator.isFloatV2(() => ({})), false);
+    // NOTE: isNumber 검사에서는 성공했으나 isFloat 에서는 실패
+    // NOTE: 무한(Infinity)은 실수가 아님 (MDN 링크 추가 필요!)
+    assert.equal(validator.isFloatV2(Infinity), false);
+    assert.equal(validator.isFloatV2(-Infinity), false);
+    assert.equal(validator.isFloatV2(Number.NEGATIVE_INFINITY), false);
+    assert.equal(validator.isFloatV2(Number.POSITIVE_INFINITY), false);
+    assert.equal(validator.isFloatV2(Number.MAX_SAFE_INTEGER), false);
+    assert.equal(validator.isFloatV2(Number.MIN_SAFE_INTEGER), false);
+    // NOTE: MAX_VALUE는 정수임 (MDN 링크 추가 필요!)
+    assert.equal(validator.isFloatV2(Number.MAX_VALUE), false);
+    assert.equal(validator.isFloatV2(1), false);
+    assert.equal(validator.isFloatV2(-1), false);
+    assert.equal(validator.isFloatV2(0), false);
+  });  
 
-  it('isInteger:valid', () => {
+  xit('isInteger:valid', () => {
+    console.log('HERE:', Number.MAX_VALUE % 1 === 0);
     assert.equal(validator.isInteger(1), true);
     assert.equal(validator.isInteger(-1), true);
     assert.equal(validator.isInteger(0), true);
     assert.equal(validator.isInteger(Number.MAX_SAFE_INTEGER), true);
     assert.equal(validator.isInteger(Number.MIN_SAFE_INTEGER), true);
+    assert.equal(validator.isInteger(Number.MAX_VALUE), true);
   });
 
-  it('isInteger:not valid', () => {
+  xit('isInteger:not valid', () => {
     // NOTE: isFloat 검사에서는 성공했으나 isInteger 에서는 실패
     assert.equal(validator.isInteger(0.1), false);
     assert.equal(validator.isInteger(-1.1), false);
     assert.equal(validator.isInteger(Number.MIN_VALUE), false);
-    assert.equal(validator.isInteger(Number.MAX_VALUE), false);
   });  
 
   it('isPositiveInteger:valid', () => {

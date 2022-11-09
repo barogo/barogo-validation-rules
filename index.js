@@ -64,9 +64,12 @@ export const validator = {
     return typeof v === 'number';
   },
   /**
-   * 유효한 실수(float) 타입인지 확인합니다.
-   * 주의: 실수는 숫자의 부분집합이므로 isFloat 메서드를 참조합니다.
-   * NOTE: epsilon은 1과 1보다 큰 최소 실수값의 차를 의미. 그러므로 epsilon은 실수.
+   * 유효한 부동소수점(float) 타입인지 확인합니다.
+   * 주의: 부동소수점(float)는 숫자의 부분집합이므로 isNumber 메서드를 참조합니다.
+   * NOTE: 
+   * epsilon은 1과 1보다 큰 최소 실수값의 차를 의미. 그러므로 epsilon은 실수.
+   * Number.MAX_VALUE는 21024 - 1 이므로 정수임. 부동 소수점에 포함되지 않습니다.
+   * 참고: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_VALUE
    *
    * @param {number} v - 검사할 값
    *
@@ -75,25 +78,52 @@ export const validator = {
   isFloat(v) {
     if (!this.isNumber(v) || 
         v === Number.NEGATIVE_INFINITY ||
-        v === Number.POSITIVE_INFINITY) {
+        v === Number.POSITIVE_INFINITY ||
+        v === Number.MAX_VALUE ||
+        parseInt(v, 10) === v) {
       return false;
     }
     return true;
   },
   /**
+   * Float 여부를 판단합니다. 아래 방식을 참고했습니다.
+   * https://stackoverflow.com/questions/3885817/how-do-i-check-that-a-number-is-float-or-integer/3886106#3886106
+   * 
+   * @param {*} v 
+   * @returns 
+   */
+  isFloatV2(v) {
+    if (!this.isNumber(v) || v === Number.NEGATIVE_INFINITY || v === Number.POSITIVE_INFINITY) {
+      return false;
+    }
+    return v % 1 !== 0;
+  },  
+  /**
    * 유효한 정수(integer) 타입인지 확인합니다.
-   * 주의: 정수는 실수의 부분집합이므로 isFloat 메서드를 참조합니다.
+   * 주의: 정수와 실수는 다른 개념입니다. 그러므로 정수 검사에서는 숫자 여부만을 먼저 판단합니다.
+   * https://www.techopedia.com/definition/23980/float-computer-science
    *
    * @param {number} v - 검사할 값
    *
    * @return {boolean} 검사할 값의 정수(integer) 여부
    */
   isInteger(v) {
-    if (!this.isFloat(v)) {
+    if (!this.isNumber(v) || 
+        v === Number.NEGATIVE_INFINITY ||
+        v === Number.POSITIVE_INFINITY) {
       return false;
     }
     return parseInt(v, 10) === v;
+    // return v % 1 === 0;
   },
+  /**
+   * Integer 여부를 판단합니다. 아래 방식을 참고했습니다.
+   * https://stackoverflow.com/questions/3885817/how-do-i-check-that-a-number-is-float-or-integer/3886106#3886106
+   * 
+   * @param {*} v 
+   * @returns 
+   */  
+  isIntegerV2: (v) => v % 1 === 0,
   /**
    * 유효한 양의 정수(positive integer) 타입인지 확인합니다.
    * 주의: 양의 정수는 정수의 부분집합이므로 isInteger 메서드를 참조합니다.
