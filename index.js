@@ -40,7 +40,6 @@ const REGEXP = {
 // NOTE: validator 내부에서 자체 메서드를 참조하는 경우는 명확한 사유가 있어야 합니다.
 // 상호참조 및 의존성 관리를 위해서 내부 메서드 참조를 제한해야 합니다.
 export const validator = {
-  // TODO null과 undefined는 분리되어야 하지 않을까?
   /**
    * 유효한 number 타입인지 확인합니다.
    * 정수(integer)와 실수(float), 무한(Infinity)은 유효합니다.
