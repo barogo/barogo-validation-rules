@@ -101,7 +101,6 @@ describe('validator', () => {
     // NOTE: isInteger 검사에서는 성공했으나 isPositiveInteger 에서는 실패
     assert.equal(validator.isPositiveInteger(0), false);
     assert.equal(validator.isPositiveInteger(-1), false);
-    assert.equal(validator.isPositiveInteger(1), true);
   });  
 
   it('isTelephone', () => {
