@@ -271,7 +271,7 @@ const essentials = {
   }
 };
 
-export const bRules = Object.assign({ // TODO rules, utils로 일반적인 이름으로 가는 것이 좋겠다.
+export const bRules = Object.assign({
   /**
    * 유효한 값인지 여부를 검사하는 메서드를 반한합니다.
    * 유효하지 않은 값은 null, undefeind, ''(공백문자열) 입니다.
