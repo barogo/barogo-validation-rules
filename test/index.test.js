@@ -217,14 +217,12 @@ describe('bRules', () => {
     assert.equal(bRules.required()(''), false);
     assert.equal(bRules.required()(0), true);
     assert.equal(bRules.required()({}), true);
-    // FIX ME 빈배열은 유효한 값이 아닌가?
     assert.equal(bRules.required()([]), false);
     assert.equal(bRules.required()(Symbol()), true);
     assert.equal(bRules.required()(123), true);
     assert.equal(bRules.required()('123'), true);
     assert.equal(bRules.required()(() => ({})), true);
-    // FIX ME NaN은 유효한 값이 아닌 것오로 보임. 논의 필요.
-    // assert.equal(bRules.required()(NaN), false);
+    assert.equal(bRules.required()(NaN), false);
   });
 
   it('businessNumber', () => {
