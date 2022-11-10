@@ -218,7 +218,7 @@ describe('bRules', () => {
     assert.equal(bRules.required()(0), true);
     assert.equal(bRules.required()({}), true);
     // FIX ME 빈배열은 유효한 값이 아닌가?
-    // assert.equal(bRules.required()([]), true);
+    assert.equal(bRules.required()([]), false);
     assert.equal(bRules.required()(Symbol()), true);
     assert.equal(bRules.required()(123), true);
     assert.equal(bRules.required()('123'), true);

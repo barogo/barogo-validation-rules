@@ -262,6 +262,9 @@ const essentials = {
   isEmptyString(msg = false) {
     return ((v) => String(v).trim() === '' || msg);
   },
+  isEmptyArray(msg = false) {
+    return ((v) => Array.isArray(v) && v.length === 0 || msg);
+  },
   // NOTE: isNull을 null과 undefined를 동시에 판단하는 것으로 컨벤션을 정함.
   isNull(msg = false) {
     return ((v) => (v === undefined || v === null) || msg);
@@ -274,7 +277,7 @@ const essentials = {
 export const bRules = Object.assign({
   /**
    * 유효한 값인지 여부를 검사하는 메서드를 반한합니다.
-   * 유효하지 않은 값은 null, undefeind, ''(공백문자열) 입니다.
+   * 유효하지 않은 값은 null, undefeind, ''(공백문자열), 빈배열([]) 입니다.
    * 주의: 0은 유효한 값으로 인정합니다.
    *
    * @param {string|boolean} msg - 유효하지 않을 경우, 반환할 문자열(string) 값 또는 불린(boolean) 값
@@ -282,7 +285,7 @@ export const bRules = Object.assign({
    * @return {function} 유효한 값인지 여부를 검사하는 메서드
    */
   required(msg = false) {
-    return ((v) => !essentials.isNull()(v) && !essentials.isEmptyString()(v) || msg);
+    return ((v) => !essentials.isNull()(v) && !essentials.isEmptyArray()(v) && !essentials.isEmptyString()(v) || msg);
   },
   /**
    * 유효한 사업자번호 여부를 검사하는 메서드를 반한합니다.
