@@ -62,11 +62,12 @@ export const validator = {
     return typeof v === 'number';
   },
   /**
-   * Float 여부를 판단합니다. 아래 방식을 참고했습니다.
+   * Float(부동소수점) 여부를 판단합니다. 아래 방식을 참고했습니다.
    * https://stackoverflow.com/questions/3885817/how-do-i-check-that-a-number-is-float-or-integer/3886106#3886106
    * 
-   * @param {*} v 
-   * @returns 
+   * @param {number} v - 검사할 값
+   * 
+   * @return {boolean} 검사할 값의 Float(부동소수점) 여부
    */
   isFloat(v) {
     if (!this.isNumber(v) || 
