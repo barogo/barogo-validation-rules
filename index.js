@@ -286,13 +286,14 @@ export const bRules = Object.assign({
   },
   /**
    * 유효한 사업자번호 여부를 검사하는 메서드를 반한합니다.
+   * TODO 사업자 번호 규칙이 있음. 이를 추후에 반영하자.
+   * https://liebe97.tistory.com/16
    *
    * @param {string|boolean} msg - 유효하지 않을 경우, 반환할 문자열(string) 값 또는 불린(boolean) 값
    *
    * @return {function} 유효한 사업자번호 여부를 검사하는 메서드
    */
   businessNumber(msg = false) {
-    // TODO 좀 더 상세한 사업자번호 규칙이 있지 않을까?
     return ((v) => essentials.isNumber()(v) && essentials.lengthEqual(10)(v) || msg);
   },
   /**
