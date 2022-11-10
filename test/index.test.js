@@ -198,6 +198,9 @@ describe('validator', () => {
     assert.equal(validator.isBoolean(0), false);
     assert.equal(validator.isBoolean(1.1), false);
     assert.equal(validator.isBoolean(-1), false);
+    assert.equal(validator.isBoolean(1), false);
+    assert.equal(validator.isBoolean('true'), false);
+    assert.equal(validator.isBoolean('false'), false);    
     assert.equal(validator.isBoolean(Number.MIN_VALUE), false);
     assert.equal(validator.isBoolean(Number.MAX_VALUE), false);
     assert.equal(validator.isBoolean('가나다'), false);
