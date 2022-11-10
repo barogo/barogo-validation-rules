@@ -306,7 +306,7 @@ export const bRules = Object.assign({
   email(msg = false) {
     return ((v) => validator.isEmail(v) || msg);
   },
-  // FIX ME: 서비스마다 loginId에 대한 규칙은 다를 것 같습니다. 논의 필요할 듯 합니다.
+  // TODO 서비스에 따른 loginId에 대한 규칙은 password처럼 모듈화해서 필요한 규칙을 조합해서 쓰는 방식으로 진행합니다.
   loginId(msg = false) {
     return ((v) => REGEXP.LOGIN_ID.test(v) || msg);
   },
