@@ -27,7 +27,6 @@ const REGEXP = {
    */
   LOGIN_ID: /^[\w-@._]{4,}$/,
   TEL: /^\d{8,12}$/,
-  PHONE: /^\d{10,11}$/,
   CELL_PHONE: /^\d{10,11}$/,
   // https://www.postgresql.org/docs/9.1/datatype-uuid.html
   // https://stackoverflow.com/questions/7905929/how-to-test-valid-uuid-guid
