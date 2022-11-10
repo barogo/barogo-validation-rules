@@ -156,11 +156,11 @@ describe('validator', () => {
     assert.equal(validator.isEmail('1234567890'), false);
     assert.equal(validator.isEmail('가나다'), false);
     assert.equal(validator.isEmail('abc'), false);
-    assert.equal(validator.isEmail('wonder13662@'), false);
-    assert.equal(validator.isEmail('wonder13662@gmail'), false);
-    assert.equal(validator.isEmail('wonder13662@gmail.c'), false);
-    assert.equal(validator.isEmail('wonder13662@gmail.co'), true);
-    assert.equal(validator.isEmail('wonder13662@gmail.com'), true);
+    assert.equal(validator.isEmail('harry1993@'), false);
+    assert.equal(validator.isEmail('harry1993@gmail'), false);
+    assert.equal(validator.isEmail('harry1993@gmail.c'), false);
+    assert.equal(validator.isEmail('harry1993@gmail.co'), true);
+    assert.equal(validator.isEmail('harry1993@gmail.com'), true);
   });
 
   it('isUUID', () => {
@@ -180,7 +180,7 @@ describe('validator', () => {
     assert.equal(validator.isUUID('1234567890'), false);
     assert.equal(validator.isUUID('가나다'), false);
     assert.equal(validator.isUUID('abc'), false);
-    assert.equal(validator.isUUID('wonder13662@gmail.com'), false);
+    assert.equal(validator.isUUID('harry1993@gmail.com'), false);
     assert.equal(validator.isUUID('20f8d123-bdf5'), false);
     assert.equal(validator.isUUID('20f8d123-bdf5-4b83'), false);
     assert.equal(validator.isUUID('20f8d123-bdf5-4b83-aa17'), false);
