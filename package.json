@@ -1,6 +1,6 @@
 {
   "name": "barogo-validation-rules",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Barogo validation rules",
   "main": "index.js",
   "types" : "index.d.ts",
