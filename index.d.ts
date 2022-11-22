@@ -15,6 +15,7 @@ interface IEssentials {
   isEmptyString: (msg?: ValidationResult) => ValidationFunction;
   isNull: (msg?: ValidationResult) => ValidationFunction;
   notNull: (msg?: ValidationResult) => ValidationFunction;
+  isEqualString: (target: string, msg?: ValidationResult) => ValidationFunction;
 }
 
 interface IbRules extends IEssentials {
