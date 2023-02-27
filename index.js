@@ -1,12 +1,12 @@
-// get choose n from array combinations
-export const getCombinations = (arr, n) => {
-  if (n === 1) {
+// nCr
+export const getCombinations = (arr, pick) => {
+  if (pick === 1) {
     return arr.map((e) => [e]);
   }
   const result = [];
   arr.forEach((e, i) => {
     const rest = arr.slice(i + 1);
-    const combinations = getCombinations(rest, n - 1);
+    const combinations = getCombinations(rest, pick - 1);
     const attached = combinations.map((combination) => [e, ...combination]);
     result.push(...attached);
   });
