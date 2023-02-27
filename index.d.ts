@@ -2,16 +2,16 @@ export type ValidationResult = string | boolean;
 export type ValidationFunction = (value: any) => ValidationResult;
 
 export declare const validator: {
-  isNumber: (value: any) => boolean;
-  isFloat: (value: any) => boolean;
-  isinteger: (value: any) => boolean;
-  isPositiveInteger: (value: any) => boolean;
-  isString: (value: any) => boolean;
-  isTelephone: (value: any) => boolean;
-  isCellPhone: (value: any) => boolean;
-  isEmail: (value: any) => boolean;
-  isUUID: (value: any) => boolean;
-  isBoolean: (value: any) => boolean;
+  isNumber: (value: any) => value is number;
+  isFloat: (value: any) => value is number;
+  isinteger: (value: any) => value is number;
+  isPositiveInteger: (value: any) => value is number;
+  isString: (value: any) => value is string;
+  isTelephone: (value: any) => value is string;
+  isCellPhone: (value: any) => value is string;
+  isEmail: (value: any) => value is string;
+  isUUID: (value: any) => value is string;
+  isBoolean: (value: any) => value is boolean;
 };
 
 interface IEssentials {
