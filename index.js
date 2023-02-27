@@ -1,24 +1,63 @@
+// get choose n from array combinations
+export const getCombinations = (arr, n) => {
+  if (n === 1) {
+    return arr.map((e) => [e]);
+  }
+  const result = [];
+  arr.forEach((e, i) => {
+    const rest = arr.slice(i + 1);
+    const combinations = getCombinations(rest, n - 1);
+    const attached = combinations.map((combination) => [e, ...combination]);
+    result.push(...attached);
+  });
+  return result;
+};
+
+
 const REGEXP = {
-  // TODO 각 정규표현식에서 검사하는 조건을 주석으로 표현하는 것이 좋겠습니다. 
-  // 개발자 뿐만이 아닌 기획에서도 이 규칙을 확인할 필요가 있기 때문입니다.
-  // 그리고 개발자더라도 정규표현식이 길어지면 이해하기 조금 어려운 부분이 있네요.
   /**
    * PASSWORD 정규표현식 해석
+   * - 정책
+   *   - 영소문자
+   *   - 영대문자
+   *   - 숫자(0~9)
+   *   - 특수 문자(! # $ % ( ) * + - . : ; = ? @ [ ] ^ _ { } ~)
+   *   - 중에서 3조합, 8자 이상
    * 
    * 1. (?=.*[a-z]) // 최소 1개 이상의 영소문자
    * 2. (?=.*[A-Z]) // 최소 1개 이상의 영대문자
    * 3. (?=.*\d) // 최소 1개 이상의 숫자
-   * 4-1. (?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]) // 최소 1개 이상의 특수문자
-   * 4-2. !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ // 특수문자 중 허용문자
-   * 5. [A-Za-z\d!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]{10,} // 1, 2, 3, 4의 조합으로 10글자 이상
+   * 4-1. (?=.*[\!\#\$\%\(\)\*\+\-\.\:\;\=\?\@\[\]\^\_\{\}\~]) // 최소 1개 이상의 특수문자
+   * 4-2. !#$%()*+-.:;=?@[]^_{}~ // 특수문자 중 허용문자
+   * 5. [A-Za-z\d\!\#\$\%\(\)\*\+\-\.\:\;\=\?\@\[\]\^\_\{\}\~]{8,} // 1, 2, 3, 4의 조합으로 8글자 이상
    */
-  PASSWORD: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])[A-Za-z\d!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]{10,}$/,
+  PASSWORD: (() => {
+    const lowerCase = '[a-z]';
+    const upperCase = '[A-Z]';
+    const number = String.raw`\d`;
+    const specialCharacter = String.raw`[\!\#\$\%\(\)\*\+\-\.\:\;\=\?\@\[\]\^\_\{\}\~]`;
+    const minLength = 8;
+    const combinationSelect = 3;
+
+    const cases = [ lowerCase, upperCase, number, specialCharacter ];
+
+    const allowedCombination = getCombinations(cases, combinationSelect)
+      .map((combinationA) => combinationA
+        .map((caseA) => `(?=.*${caseA})`)
+        .join(''))
+      .join('|');
+
+    const allowedCharacter = cases.map((caseA) => caseA.replace(/^\[(.*)\]$/, '$1')).join('');
+
+    return new RegExp(`^(?:${allowedCombination})[${allowedCharacter}]{${minLength},}$`);
+  })(),
+
   /**
    * PASSWORD_ALLOWED_TEXT 정규표현식 해석
    * 
    * 1. !"#$%&'()*+,-./:;<=>?@[]^_`{|}~ // 빈값 혹은, 영문 소문자, 대문자, 숫자, 허용 특수문자만 가능
    */
-  PASSWORD_ALLOWED_TEXT: /^[A-Za-z\d!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]{0,}$/,
+  PASSWORD_ALLOWED_TEXT: /^[a-zA-Z\d\!\#\$\%\(\)\*\+\-\.\:\;\=\?\@\[\]\^\_\{\}\~]{0,}$/,
   EMAIL: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   /**
    * LOGIN_ID 정규표현식 해석
